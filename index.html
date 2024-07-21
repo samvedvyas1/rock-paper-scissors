@@ -1,18 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <script src="./script.js" defer></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Righteous&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+  </style>
+  <link rel="stylesheet" href="./styles.css">
+  <script src="./script.js" defer></script>
 </head>
-<body>
-    <button class="rock">Rock</button>
-    <button class="paper">Paper</button>
-    <button class="scissors">Scissors</button>
-
-    <div class="container">
-        
+  <body>
+    <div class="header">
+      Rock Paper Scissors
     </div>
-</body>
+    <div class="text-container">
+      <div class="win">Choose your weapon</div>
+      <div class="win-reason">First to score 5 points wins the game</div>
+    </div>
+    <div class="score-container">
+      <div class="player">
+        <div class="player-icon">❔</div>
+        <div class="player-score">Player: 0</div>
+      </div>
+      <div class="computer">
+        <div class="computer-icon">❔</div>
+        <div class="computer-score">Computer: 0</div>
+      </div>
+    </div>
+    <div class="button-container">
+      <button class="rock">✊</button>
+      <button class="paper">✋</button>
+      <button class="scissors">✌</button>
+    </div>
+  </body>
 </html>

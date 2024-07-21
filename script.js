@@ -3,14 +3,15 @@ let humanScore = 0, computerScore = 0;
 const rock_btn = document.querySelector(".rock");
 const paper_btn = document.querySelector(".paper");
 const scissors_btn = document.querySelector(".scissors");
-const container = document.querySelector(".container");
-
-const display = document.createElement("div");
-const score = document.createElement("div");
-score.classList.add("score");
-display.classList.add("display");
-container.appendChild(display);
-container.appendChild(score);
+const win = document.querySelector(".win");
+const winReason = document.querySelector(".win-reason");
+const player_score = document.querySelector(".player-score");
+const computer_score = document.querySelector(".computer-score");
+const player_icon = document.querySelector(".player-icon");
+const computer_icon = document.querySelector(".computer-icon");
+const modal = document.querySelector(".modal");
+const play_again = document.querySelector(".play-again");
+const modal_win = document.querySelector(".modal-win");
 
 rock_btn.addEventListener("click", () => {
     const humanChoice = "rock";
@@ -44,20 +45,27 @@ function capitalize(str) {
 }
 
 function getOutcome(humanChoice, computerChoice = getComputerChoice()) {
-    if(humanChoice === computerChoice) return "t";
-    else if(humanChoice === "rock" && computerChoice === "paper") {return "c"}
-    else if(humanChoice === "rock" && computerChoice === "scissors") {return "h"}
-    else if(humanChoice === "paper" && computerChoice === "rock") {return "h"}
-    else if(humanChoice === "paper" && computerChoice === "scissors") {return "c"}
-    else if(humanChoice === "scissors" && computerChoice === "rock") {return "c"}
-    else if(humanChoice === "scissors" && computerChoice === "paper") {return "h"}
+    if (humanScore === 5 || computerScore === 5) {
+        return;
+    }
+
+    if(humanChoice === computerChoice) {
+        if (humanChoice === "rock") {player_icon.textContent = "✊"; computer_icon.textContent = "✊";}
+        else if (humanChoice === "paper") {player_icon.textContent = "✋"; computer_icon.textContent = "✋";}
+        else {player_icon.textContent = "✌"; computer_icon.textContent = "✌";}
+
+        return "t";
+    }
+    else if(humanChoice === "rock" && computerChoice === "paper") {player_icon.textContent = "✊"; computer_icon.textContent = "✋"; return "c"}
+    else if(humanChoice === "rock" && computerChoice === "scissors") {player_icon.textContent = "✊"; computer_icon.textContent = "✌"; return "h"}
+    else if(humanChoice === "paper" && computerChoice === "rock") {player_icon.textContent = "✋"; computer_icon.textContent = "✊"; return "h"}
+    else if(humanChoice === "paper" && computerChoice === "scissors") {player_icon.textContent = "✋"; computer_icon.textContent = "✌"; return "c"}
+    else if(humanChoice === "scissors" && computerChoice === "rock") {player_icon.textContent = "✌"; computer_icon.textContent = "✊"; return "c"}
+    else if(humanChoice === "scissors" && computerChoice === "paper") {player_icon.textContent = "✌"; computer_icon.textContent = "✋"; return "h"}
 }
 
 function playGame(outcome, humanChoice) {
-    if (humanScore === 5 || computerScore === 5) {
-        display.textContent = "Game over!";
-        return;
-    }
+    if (humanScore === 5 || computerScore === 5) return;
     switch (outcome) {
         case "h":
             humanScore += 1;
@@ -68,18 +76,45 @@ function playGame(outcome, humanChoice) {
     }
     if (humanScore !== 5 && computerScore !== 5) {
         if (outcome === "t") {
-            display.textContent = `It's a tie! ${capitalize(humanChoice)} ties with ${capitalize(humanChoice)}`;
+            win.textContent = `It's a tie!`; 
+            winReason.textContent = `${capitalize(humanChoice)} ties with ${capitalize(humanChoice)}`;
         }
         else if (outcome === "h") {
-            if (humanChoice === "rock") display.textContent = "You win! Rock beats scissors";
-            else if (humanChoice === "paper") display.textContent = "You win! Paper beats Rock";
-            else display.textContent = "You win! Scissors beats Paper";
+            if (humanChoice === "rock") {win.textContent = "You win!"; winReason.textContent =  "Rock beats scissors";}
+            else if (humanChoice === "paper") {win.textContent = "You win!"; winReason.textContent = "Paper beats Rock";}
+            else {win.textContent = "You win!"; winReason.textContent =  "Scissors beats Paper";}
         }
         else {
-            if (humanChoice === "rock") display.textContent = "You lose! Paper beats Rock";
-            else if (humanChoice === "paper") display.textContent = "You lose! Scissors beats Paper";
-            else display.textContent = "You lose! Rock beats scissors";
+            if (humanChoice === "rock") {win.textContent = "You lose!"; winReason.textContent = "Paper beats Rock";}
+            else if (humanChoice === "paper") {win.textContent = "You lose!"; winReason.textContent = "Scissors beats Paper";}
+            else {win.textContent = "You lose!"; winReason.textContent =  "Rock beats scissors";}
         }
     }
-    score.textContent = `You - ${humanScore}\tComputer - ${computerScore}`;
+    player_score.textContent = `Player: ${humanScore}`;
+    computer_score.textContent = `Computer: ${computerScore}`;
+    
+    if (humanScore === 5 || computerScore === 5) {
+        win.textContent = "Game over!";
+        if (humanScore === 5) {winReason.textContent = `🎉 You Won the Game! 🎉`; modal_win.textContent = "You won!";}
+        else {winReason.textContent = `Computer Won the Game! 🤖`; modal_win.textContent = "You lost...";}
+        
+        modal.style.display = "block";
+        play_again.addEventListener("click", () => {
+            win.textContent = "Choose your weapon";
+            winReason.textContent = "First to score 5 points wins the game";
+            player_icon.textContent = computer_icon.textContent = "❔";
+            player_score.textContent = "Player: 0";
+            computer_score.textContent = "Computer: 0";
+            humanScore = 0;
+            computerScore = 0;
+            modal.style.display = "none";
+        })
+
+    }  
+}
+
+function restart() {
+    humanScore = computerScore = 0;
+    win.textContent = "Choose your weapon";
+    winReason.textContent = "First to score 5 points wins the game";
 }
